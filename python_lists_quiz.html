@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تفاعلي: قوائم بايثون (Python Lists)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-dark: #0f172a;
+            --accent: #f59e0b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --code-color: #38bdf8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 26px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 1.7rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            direction: ltr;
+        }
+
+        .stats-bar {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: block;
+        }
+
+        .stat-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-val.high {
+            color: var(--accent);
+        }
+
+        .btn-index {
+            background: #eff6ff;
+            color: var(--primary);
+            border: 2px solid #bfdbfe;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-index:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .q-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 10px 20px -3px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .q-badge {
+            background: #eff6ff;
+            color: var(--primary);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #f8fafc;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            direction: ltr;
+            text-align: left;
+            margin: 12px 0 18px 0;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            line-height: 1.5;
+        }
+
+        .code-block code {
+            font-family: inherit;
+        }
+
+        .q-text-ar {
+            font-size: 1.25rem;
+            font-weight: 800;
+            line-height: 1.8;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .q-text-en {
+            font-size: 1.02rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #475569;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            border-left: 3px solid var(--primary);
+            padding-left: 12px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .opt-btn {
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            padding: 14px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: right;
+        }
+
+        .opt-btn:hover:not(:disabled) {
+            background: #eff6ff;
+            border-color: #93c5fd;
+            transform: translateX(-4px);
+        }
+
+        .opt-btn.correct {
+            background: #dcfce7 !important;
+            border-color: var(--success) !important;
+        }
+
+        .opt-btn.wrong {
+            background: #fee2e2 !important;
+            border-color: var(--danger) !important;
+        }
+
+        .opt-ar {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .opt-en {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #64748b;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Inter', 'Fira Code', sans-serif;
+        }
+
+        .opt-btn.correct .opt-ar, .opt-btn.correct .opt-en {
+            color: #15803d !important;
+        }
+
+        .opt-btn.wrong .opt-ar, .opt-btn.wrong .opt-en {
+            color: #991b1b !important;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            display: none;
+            background: #f1f5f9;
+            border-right: 5px solid var(--primary);
+        }
+
+        .exp-en {
+            direction: ltr;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            color: #334155;
+            margin-top: 6px;
+            font-size: 0.92rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .btn-nav {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-nav:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 650px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 26px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            animation: popIn 0.25s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        .grid-index {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .index-pill {
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            padding: 10px 4px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: #334155;
+        }
+
+        .index-pill:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+            transform: translateY(-2px);
+        }
+
+        .index-pill.active {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.25);
+            font-weight: 900;
+        }
+
+        .index-pill.solved-correct {
+            background: #dcfce7 !important;
+            border-color: #22c55e !important;
+            color: #15803d !important;
+        }
+
+        .index-pill.solved-wrong {
+            background: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #b91c1c !important;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .trophy {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #eff6ff;
+            border: 6px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+        }
+
+        .score-num {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .btn-restart {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 14px 34px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.2s;
+        }
+
+        .btn-restart:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>اختبار مهارات بايثون: القوائم (20 سؤالاً)</h1>
+        <p>Comprehensive Python Lists Quiz: Indexing, Slicing, Modification & Methods</p>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-label">رقم السؤال / Question</span>
+            <div><span class="stat-val" id="qCurrent">1</span> / 20</div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">أول محاولة / 1st Score 🎯</span>
+            <span class="stat-val" style="color: #6366f1;" id="firstScore">--</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">الدرجة الحالية / Score</span>
+            <span class="stat-val" id="score">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">أعلى نتيجة / High Score 🏆</span>
+            <span class="stat-val high" id="highScore">0</span>
+        </div>
+        <div>
+            <button class="btn-index" onclick="openIndexModal()">
+                <span>📑</span>
+                <span>فهرس الأسئلة (1-20)</span>
+            </button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <!-- Question Box -->
+    <div class="q-card" id="quizCard">
+        <div class="q-header">
+            <span class="q-badge" id="topicBadge">Python Lists</span>
+            <span style="color: var(--text-muted); font-size: 0.9rem;" id="qStatusIndicator">لم يُجب بعد / Not answered</span>
+        </div>
+        
+        <div class="q-text-ar" id="questionTextAr">جاري تحميل السؤال...</div>
+        <div class="q-text-en" id="questionTextEn">Loading question...</div>
+        
+        <pre class="code-block" id="codeBlock" style="display:none;"><code id="codeContent"></code></pre>
+
+        <div class="options-list" id="optionsContainer"></div>
+        
+        <div class="explanation" id="explanationText"></div>
+
+        <div class="actions">
+            <button class="btn-nav" id="prevBtn" onclick="prevQuestion()" disabled>➡️ السابق / Prev</button>
+            <button class="btn-nav" id="nextBtn" onclick="nextQuestion()">التالي / Next ⬅️</button>
+        </div>
+    </div>
+
+    <!-- Results Box -->
+    <div class="results-card" id="resultsCard">
+        <div class="trophy" id="trophyIcon">🎉</div>
+        <h2 id="resultMsg" style="font-size: 1.8rem; margin-bottom: 8px;">أحسنت صنعاً!</h2>
+        <p id="resultSubtitle" style="color: var(--text-muted);">You completed all 20 questions!</p>
+        
+        <div class="score-circle">
+            <div class="score-num" id="finalScore">0</div>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">/ 20</span>
+        </div>
+
+        <p id="highScoreNotice" style="font-weight: 700; font-size: 1.1rem; color: var(--accent); margin-top: 10px;"></p>
+
+        <button class="btn-restart" onclick="restartQuiz()">إعادة الاختبار من البداية 🔄</button>
+    </div>
+</div>
+
+<!-- Modal Index Window -->
+<div class="modal-overlay" id="indexModal" onclick="closeIndexModalOnOutside(event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📑 فهرس الانتقال السريع للأسئلة</h3>
+            <button class="close-btn" onclick="closeIndexModal()">✕</button>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background: #22c55e;"></div><span>إجابة صحيحة</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background: #ef4444;"></div><span>إجابة خاطئة</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background: #1e3a8a;"></div><span>السؤال المفتوح حالياً</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background: #e2e8f0; border: 1px solid #cbd5e1;"></div><span>لم يُحل بعد</span></div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">اضغط على أي رقم للمعاينة أو حل السؤال مباشرة دون قيود:</p>
+        
+        <div class="grid-index" id="gridIndexContainer"></div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nprint(students[1])",
+            ar_q: "ما هو ناتج طباعة الكود البرمجي الموضح أعلاه؟",
+            en_q: "What is the output of the code shown above?",
+            options: [
+                { ar: "طباعة العنصر 'ali'", en: "'ali'" },
+                { ar: "طباعة العنصر 'omar'", en: "'omar'" },
+                { ar: "طباعة العنصر 'ahmed'", en: "'ahmed'" },
+                { ar: "حدوث خطأ IndexError", en: "IndexError" }
+            ],
+            correct: 1, // B
+            exp_ar: "الفهارس في لغات البرمجة تبدأ من الرقم 0؛ لذلك students[0] هو 'ali' و students[1] هو 'omar'.",
+            exp_en: "Indexing in Python starts from 0, so students[0] is 'ali' and students[1] is 'omar'."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents[1] = 'yassin'\nprint(students)",
+            ar_q: "ماذا سيطبع البرنامج بعد تنفيذ عملية الإسناد المباشر؟",
+            en_q: "What will the program print after executing the direct assignment?",
+            options: [
+                { ar: "['ali', 'omar', 'ahmed', 'yassin']", en: "['ali', 'omar', 'ahmed', 'yassin']" },
+                { ar: "['yassin', 'omar', 'ahmed']", en: "['yassin', 'omar', 'ahmed']" },
+                { ar: "['ali', 'yassin', 'ahmed']", en: "['ali', 'yassin', 'ahmed']" },
+                { ar: "['ali', 'omar', 'yassin']", en: "['ali', 'omar', 'yassin']" }
+            ],
+            correct: 2, // C
+            exp_ar: "القوائم في بايثون قابلة للتعديل (Mutable)، واستبدال students[1] يغير 'omar' إلى 'yassin'.",
+            exp_en: "Lists are mutable; assigning a value to index 1 replaces 'omar' with 'yassin'."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents[1:2] = 'yassin', 'basel'\nprint(students)",
+            ar_q: "ما هي النتيجة النهائية للمصفوفة بعد تعديل النطاق الجزئي (Slice)؟",
+            en_q: "What is the resulting list after slicing assignment?",
+            options: [
+                { ar: "['ali', 'yassin', 'basel', 'ahmed']", en: "['ali', 'yassin', 'basel', 'ahmed']" },
+                { ar: "['ali', ('yassin', 'basel'), 'ahmed']", en: "['ali', ('yassin', 'basel'), 'ahmed']" },
+                { ar: "['ali', 'yassin', 'ahmed']", en: "['ali', 'yassin', 'ahmed']" },
+                { ar: "حدوث خطأ في بناء الجملة SyntaxError", en: "SyntaxError exception" }
+            ],
+            correct: 0, // A
+            exp_ar: "النطاق 1:2 يستهدف العنصر في الموقع 1 فقط ('omar') ويستبدله بالعنصرين الجديدين معاً فيتسع طول القائمة.",
+            exp_en: "Slice [1:2] targets 'omar' and replaces it with both 'yassin' and 'basel', expanding the list."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.append('layan')\nprint(students)",
+            ar_q: "أين تضع الدالة ()append العنصر الجديد داخل القائمة؟",
+            en_q: "Where does the append() method insert the new element?",
+            options: [
+                { ar: "في بداية القائمة عند الفهرس 0", en: "At the start of list (index 0)" },
+                { ar: "في منتصف القائمة عشوائياً", en: "In the middle of list randomly" },
+                { ar: "في نهاية القائمة بعد العنصر الأخير", en: "At the end of list after last item" },
+                { ar: "تستبدل العنصر الأخير مباشرة", en: "Replaces the last item in-place" }
+            ],
+            correct: 2, // C
+            exp_ar: "الدالة append تضيف العنصر الممرر دائماً في نهاية القائمة وتزيد طولها بمقدار 1.",
+            exp_en: "The append() method always attaches the new element to the end of the list."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.insert(1, 'layan')\nprint(students)",
+            ar_q: "ماذا ينتج عن استخدام الدالة insert(1, 'layan') على القائمة؟",
+            en_q: "What is the result of using insert(1, 'layan') on the list?",
+            options: [
+                { ar: "['ali', 'layan', 'ahmed']", en: "['ali', 'layan', 'ahmed']" },
+                { ar: "['ali', 'layan', 'omar', 'ahmed']", en: "['ali', 'layan', 'omar', 'ahmed']" },
+                { ar: "['layan', 'ali', 'omar', 'ahmed']", en: "['layan', 'ali', 'omar', 'ahmed']" },
+                { ar: "['ali', 'omar', 'layan', 'ahmed']", en: "['ali', 'omar', 'layan', 'ahmed']" }
+            ],
+            correct: 1, // B
+            exp_ar: "الدالة insert(index, item) تدرج العنصر في الموقع المحدد وتزيح بقية العناصر إلى اليمين دون حذف أي منها.",
+            exp_en: "insert(1, 'layan') inserts 'layan' at index 1 and shifts 'omar' and subsequent items to the right."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.remove('omar')\nprint(students)",
+            ar_q: "ما هو التأثير المباشر لاستدعاء ()remove في بايثون؟",
+            en_q: "What is the direct effect of calling remove() on a list?",
+            options: [
+                { ar: "حذف العنصر بالقيمة المحددة من القائمة", en: "Removes item by matching value" },
+                { ar: "حذف العنصر اعتماداً على رقم الفهرس", en: "Removes item by target index" },
+                { ar: "إفراغ القائمة تماماً وجعلها فارغة", en: "Clears the entire list completely" },
+                { ar: "استبدال العنصر بقيمة خالية None", en: "Sets the matching item to None" }
+            ],
+            correct: 0, // A
+            exp_ar: "الدالة remove تبحث عن أول ظهور للقيمة المحددة وتقوم بحذفها مباشرة من القائمة.",
+            exp_en: "remove() deletes the first matching value from the list, not by index."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.remove('omar')\nprint(len(students))",
+            ar_q: "كم سيكون ناتج طباعة الدالة ()len في هذا الكود؟",
+            en_q: "What is the printed return value of len() in this code?",
+            options: [
+                { ar: "العدد 3", en: "Number 3" },
+                { ar: "العدد 1", en: "Number 1" },
+                { ar: "العدد 4", en: "Number 4" },
+                { ar: "العدد 2", en: "Number 2" }
+            ],
+            correct: 3, // D
+            exp_ar: "كانت القائمة تحتوي على 3 عناصر، وبعد حذف 'omar' أصبح عدد عناصرها المتبقية عنصرين فقط (2).",
+            exp_en: "The list initially had 3 items; deleting 'omar' leaves 2 items, so len() returns 2."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nprint(students.index('ahmed'))",
+            ar_q: "ما هي القيمة العددية المعادة من استدعاء ('students.index('ahmed؟",
+            en_q: "What integer value is returned by students.index('ahmed')?",
+            options: [
+                { ar: "الرقم 1", en: "Index 1" },
+                { ar: "الرقم 2", en: "Index 2" },
+                { ar: "الرقم 3", en: "Index 3" },
+                { ar: "الرقم 0", en: "Index 0" }
+            ],
+            correct: 1, // B
+            exp_ar: "الدالة index تبحث عن موقع العنصر؛ و 'ahmed' يقع في الترتيب الثالث أي عند الفهرس 2.",
+            exp_en: "'ahmed' is at the third position in zero-based indexing, which corresponds to index 2."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.sort()\nprint(students)",
+            ar_q: "كيف يصبح ترتيب عناصر القائمة بعد استدعاء الدالة ()sort؟",
+            en_q: "How are the list items ordered after executing sort()?",
+            options: [
+                { ar: "['omar', 'ali', 'ahmed']", en: "['omar', 'ali', 'ahmed']" },
+                { ar: "['ahmed', 'ali', 'omar']", en: "['ahmed', 'ali', 'omar']" },
+                { ar: "['ali', 'omar', 'ahmed']", en: "['ali', 'omar', 'ahmed']" },
+                { ar: "['ahmed', 'omar', 'ali']", en: "['ahmed', 'omar', 'ali']" }
+            ],
+            correct: 1, // B
+            exp_ar: "الدالة sort ترتب النصوص أبجدياً تصاعدياً؛ وبذلك يأتي 'ahmed' أولاً ثم 'ali' ثم 'omar'.",
+            exp_en: "sort() organizes strings in alphabetical ascending order: 'ahmed', then 'ali', then 'omar'."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nprint(students.count('ali'))",
+            ar_q: "ما هو الخرج المتوقع عند استخدام الدالة ()count في هذا الموضع؟",
+            en_q: "What is the expected output when calling count() here?",
+            options: [
+                { ar: "الرقم 1", en: "Integer 1" },
+                { ar: "الرقم 0", en: "Integer 0" },
+                { ar: "القيمة المنطقية True", en: "Boolean True" },
+                { ar: "الرقم 3", en: "Integer 3" }
+            ],
+            correct: 0, // A
+            exp_ar: "الدالة count تحسب عدد مرات تكرار العنصر الممرر داخل القائمة، وهنا 'ali' مكرر مرة واحدة فقط.",
+            exp_en: "count() returns the number of occurrences of the given item. 'ali' appears once."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents1 = ['yassin', 'adam']\nstudents.extend(students1)\nprint(students)",
+            ar_q: "ما هي وظيفة الدالة ()extend عند تطبيقها على قائمتين؟",
+            en_q: "What is the role of extend() when applied to two lists?",
+            options: [
+                { ar: "إضافة القائمة الثانية كعنصر فرعي متداخل", en: "Appends second list as a nested sublist" },
+                { ar: "دمج عناصر القائمة الثانية في نهاية الأولى", en: "Appends elements of second list to the end" },
+                { ar: "حذف العناصر المشتركة بين القائمتين", en: "Deletes common values between both lists" },
+                { ar: "إنشاء قائمة جديدة دون تعديل الأولى", en: "Creates a new list without mutating first" }
+            ],
+            correct: 1, // B
+            exp_ar: "الدالة extend تمر على عناصر القائمة الثانية وتضيف كل عنصر منها على حدة في نهاية القائمة الأصلية مباشرة.",
+            exp_en: "extend() iterates over the passed iterable and appends each element individually to the original list."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents1 = ['yassin', 'adam']\nstudents += students1\nprint(students)",
+            ar_q: "ماذا تفعل المعاملة =+ عند استخدامها بين قائمتين في بايثون؟",
+            en_q: "What does the += operator do when used between two lists in Python?",
+            options: [
+                { ar: "تجمع أطوال القائمتين في رقم عددي", en: "Calculates sum of both list lengths" },
+                { ar: "تتسبب دائماً في إطلاق خطأ TypeError", en: "Always raises a TypeError exception" },
+                { ar: "تستبدل عناصر القائمة الأولى بالثانية", en: "Overwrites first list with second list" },
+                { ar: "تكافئ استدعاء الدالة extend لدمج العناصر", en: "Acts in-place similar to calling extend()" }
+            ],
+            correct: 3, // D
+            exp_ar: "استخدام =+ مع القوائم يماثل داخلياً استدعاء extend() حيث يتم دمج عناصر students1 في students.",
+            exp_en: "For lists, the += in-place addition operator extends the original list with elements of the second."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nprint(students.count('khaled'))",
+            ar_q: "ماذا تعيد الدالة count عند البحث عن عنصر غير موجود في القائمة؟",
+            en_q: "What does count() return for an item that is not present in the list?",
+            options: [
+                { ar: "حدوث خطأ من نوع ValueError", en: "Raises a ValueError" },
+                { ar: "العدد 0", en: "Returns integer 0" },
+                { ar: "العدد 1-", en: "Returns integer -1" },
+                { ar: "قيمة خالية من نوع None", en: "Returns None value" }
+            ],
+            correct: 1, // B
+            exp_ar: "الدالة count لا تطلق أخطاء عند عدم وجود العنصر، بل ترجع ببساطة الرقم 0 دلالة على عدم التكرار.",
+            exp_en: "count() does not raise an error if the item is missing; it safely returns 0."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nprint(students.index('khaled'))",
+            ar_q: "ماذا يحدث عند محاولة استخراج فهرس عنصر غير موجود عبر ()index؟",
+            en_q: "What happens when querying index() for an item that does not exist in the list?",
+            options: [
+                { ar: "إرجاع القيمة 1-", en: "Returns -1" },
+                { ar: "إرجاع القيمة 0", en: "Returns 0" },
+                { ar: "حدوث خطأ ValueError", en: "Raises ValueError" },
+                { ar: "إرجاع القيمة False", en: "Returns False" }
+            ],
+            correct: 2, // C
+            exp_ar: "بخلاف دالة find في النصوص، فإن دالة index في القوائم تطلق خطأ ValueError إذا لم تجد العنصر.",
+            exp_en: "Unlike string find(), list.index() raises a ValueError when the specified element is absent."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nx = students.append('layan')\nprint(x)",
+            ar_q: "ما هي القيمة المخزنة في المتغير x بعد استدعاء ()append؟",
+            en_q: "What value is stored in variable x after calling append()?",
+            options: [
+                { ar: "العدد 4 (طول القائمة الجديد)", en: "Integer 4 (new length)" },
+                { ar: "القيمة None", en: "None value" },
+                { ar: "القائمة بعد التعديل", en: "The mutated list" },
+                { ar: "العنصر المضاف 'layan'", en: "The added item 'layan'" }
+            ],
+            correct: 1, // B
+            exp_ar: "الدالة append تعدل القائمة في مكانها (In-place) ولا تعيد شيئاً؛ لذا تكون قيمتها المعادة دائماً None.",
+            exp_en: "append() mutates the list in-place and returns None."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.remove('sami')",
+            ar_q: "ماذا يحدث عند محاولة استدعاء ()remove لحذف قيمة غير موجودة؟",
+            en_q: "What happens when calling remove() on a non-existent item?",
+            options: [
+                { ar: "إطلاق خطأ ValueError", en: "Raises ValueError" },
+                { ar: "تجاهل الأمر والاستمرار بدون تغيير", en: "Silently ignored without mutation" },
+                { ar: "حذف العنصر الأخير كبديل تلقائي", en: "Deletes the last element instead" },
+                { ar: "إرجاع القيمة المنطقية False", en: "Returns boolean False" }
+            ],
+            correct: 0, // A
+            exp_ar: "الدالة remove تبحث عن القيمة، وإذا لم تجدها تطلق استثناء خطأ ValueError وتوقف تنفيذ الكود.",
+            exp_en: "remove() raises a ValueError exception if the target value is not present in the list."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents.insert(10, 'layan')\nprint(students[-1])",
+            ar_q: "إذا حددنا فهـرساً كبيراً يتجاوز طول القائمة في دالة ()insert، فما النتيجة؟",
+            en_q: "If we specify an index beyond the list size in insert(), what happens?",
+            options: [
+                { ar: "حدوث خطأ IndexError بسبب تجاوز النطاق", en: "IndexError raised for out-of-range" },
+                { ar: "تجاهل العملية بالكامل وعدم الإضافة", en: "Operation ignored completely" },
+                { ar: "إضافة العنصر في نهاية القائمة كآخر عنصر", en: "Item is appended to the very end" },
+                { ar: "حشو الفهارس الفارغة بقيم None", en: "Pads intermediate indices with None" }
+            ],
+            correct: 2, // C
+            exp_ar: "الدالة insert في بايثون مرنة جداً؛ إذا كان الفهرس أكبر من طول القائمة فإنها تضع العنصر في نهاية القائمة مباشرة.",
+            exp_en: "insert() does not raise IndexError; if index >= len(list), it simply places the element at the end."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents[0:0] = ['mona']\nprint(students)",
+            ar_q: "ما هو شكل القائمة النهائي بعد تنفيذ هذا التقطيع students[0:0]؟",
+            en_q: "What is the resulting list after slicing assignment at students[0:0]?",
+            options: [
+                { ar: "استبدال 'ali' بالاسم الجديد 'mona'", en: "Replaces 'ali' with 'mona'" },
+                { ar: "إدراج 'mona' في بداية القائمة عند الفهرس 0", en: "Inserts 'mona' at the very beginning (index 0)" },
+                { ar: "عدم حدوث أي تغيير وبقاء القائمة كما هي", en: "No changes made to the list" },
+                { ar: "حدوث خطأ TypeError", en: "Raises a TypeError" }
+            ],
+            correct: 1, // B
+            exp_ar: "استخدام النطاق الفارغ 0:0 يسمح بإقحام عناصر جديدة في مقدمة القائمة دون استبدال أو حذف أي عنصر قائم.",
+            exp_en: "Assigning to an empty slice [0:0] inserts the given elements at the start of the list without deleting any item."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nstudents1 = ['yassin', 'adam']\nstudents.append(students1)\nprint(len(students))",
+            ar_q: "إذا مررنا قائمة ثانية كمدخل لدالة ()append، فكم يصبح طول القائمة الأولى؟",
+            en_q: "If a second list is passed as an argument to append(), what will len(students) be?",
+            options: [
+                { ar: "العدد 5", en: "Length 5" },
+                { ar: "العدد 3", en: "Length 3" },
+                { ar: "العدد 4", en: "Length 4" },
+                { ar: "العدد 2", en: "Length 2" }
+            ],
+            correct: 2, // C
+            exp_ar: "الدالة append تضيف القائمة الممررة كعنصر واحد مفرد داخل القائمة (قائمة متداخلة)، ليصبح الطول 3 + 1 = 4.",
+            exp_en: "append() adds the entire list object as a single nested element, making the new length 3 + 1 = 4."
+        },
+        {
+            code: "students = ['ali', 'omar', 'ahmed']\nprint(students[-1])",
+            ar_q: "ماذا يطبع البرنامج عند استخدام الفهرس السالب 1- في بايثون؟",
+            en_q: "What does negative index -1 return when indexing a list in Python?",
+            options: [
+                { ar: "أول عنصر في القائمة ('ali')", en: "First element ('ali')" },
+                { ar: "العنصر الأوسط ('omar')", en: "Middle element ('omar')" },
+                { ar: "حدوث خطأ IndexOutOfRange", en: "IndexOutOfRange error" },
+                { ar: "آخر عنصر في القائمة ('ahmed')", en: "Last element ('ahmed')" }
+            ],
+            correct: 3, // D
+            exp_ar: "الفهرسة السالبة في بايثون تبدأ العد من جهة اليمين؛ حيث يشير 1- دائماً إلى العنصر الأخير في القائمة.",
+            exp_en: "Negative indexing in Python counts from the right; index -1 always accesses the last element."
+        }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+    let currentIdx = 0;
+    let score = 0;
+
+    function loadScores() {
+        const storedHigh = localStorage.getItem('python_lists_quiz_high');
+        const high = storedHigh ? parseInt(storedHigh) : 0;
+        document.getElementById('highScore').innerText = high;
+
+        const storedFirst = localStorage.getItem('python_lists_quiz_first');
+        if (storedFirst !== null) {
+            document.getElementById('firstScore').innerText = storedFirst;
+        } else {
+            document.getElementById('firstScore').innerText = "--";
+        }
+        return { high, first: storedFirst };
+    }
+
+    function saveScores(finalScore) {
+        let isFirstTime = false;
+        if (localStorage.getItem('python_lists_quiz_first') === null) {
+            localStorage.setItem('python_lists_quiz_first', finalScore);
+            document.getElementById('firstScore').innerText = finalScore;
+            isFirstTime = true;
+        }
+
+        const currentHigh = parseInt(localStorage.getItem('python_lists_quiz_high') || '0');
+        let isNewHigh = false;
+        if (finalScore > currentHigh) {
+            localStorage.setItem('python_lists_quiz_high', finalScore);
+            document.getElementById('highScore').innerText = finalScore;
+            isNewHigh = true;
+        }
+
+        return { isFirstTime, isNewHigh };
+    }
+
+    function calculateScore() {
+        let s = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === questions[i].correct) {
+                s++;
+            }
+        }
+        score = s;
+        document.getElementById('score').innerText = score;
+        return score;
+    }
+
+    function displayQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('qCurrent').innerText = currentIdx + 1;
+        document.getElementById('questionTextAr').innerText = (currentIdx + 1) + ". " + q.ar_q;
+        document.getElementById('questionTextEn').innerText = "Q" + (currentIdx + 1) + ": " + q.en_q;
+
+        const codeBox = document.getElementById('codeBlock');
+        const codeContent = document.getElementById('codeContent');
+        if (q.code) {
+            codeContent.innerText = q.code;
+            codeBox.style.display = 'block';
+        } else {
+            codeBox.style.display = 'none';
+        }
+
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        const pct = (answeredCount / questions.length) * 100;
+        document.getElementById('progressBar').style.width = pct + '%';
+
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+
+        const expBox = document.getElementById('explanationText');
+        const statusIndicator = document.getElementById('qStatusIndicator');
+
+        const prevAns = userAnswers[currentIdx];
+
+        if (prevAns === null) {
+            statusIndicator.innerText = "لم يُجب بعد / Not answered";
+            statusIndicator.style.color = "var(--text-muted)";
+            expBox.style.display = 'none';
+        } else {
+            statusIndicator.innerText = prevAns === q.correct ? "✅ إجابة صحيحة مسجلة" : "❌ إجابة خاطئة مسجلة";
+            statusIndicator.style.color = prevAns === q.correct ? "var(--success)" : "var(--danger)";
+            showExplanation(prevAns === q.correct, prevAns);
+        }
+
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerHTML = `
+                <div class="opt-ar">${['أ', 'ب', 'ج', 'د'][idx]}) ${opt.ar}</div>
+                <div class="opt-en">${['A', 'B', 'C', 'D'][idx]}) ${opt.en}</div>
+            `;
+
+            if (prevAns !== null) {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.classList.add('correct');
+                } else if (idx === prevAns) {
+                    btn.classList.add('wrong');
+                }
+            } else {
+                btn.onclick = () => selectAnswer(idx);
+            }
+            container.appendChild(btn);
+        });
+
+        document.getElementById('prevBtn').disabled = (currentIdx === 0);
+        document.getElementById('nextBtn').innerText = (currentIdx === questions.length - 1) ? "إنهاء الاختبار / Finish 🏁" : "التالي / Next ⬅️";
+    }
+
+    function selectAnswer(chosenIdx) {
+        if (userAnswers[currentIdx] !== null) return;
+
+        userAnswers[currentIdx] = chosenIdx;
+        calculateScore();
+
+        const q = questions[currentIdx];
+        const isCorrect = (chosenIdx === q.correct);
+
+        const buttons = document.querySelectorAll('.opt-btn');
+        buttons.forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            buttons[chosenIdx].classList.add('correct');
+        } else {
+            buttons[chosenIdx].classList.add('wrong');
+            buttons[q.correct].classList.add('correct');
+        }
+
+        showExplanation(isCorrect, chosenIdx);
+
+        const statusIndicator = document.getElementById('qStatusIndicator');
+        statusIndicator.innerText = isCorrect ? "✅ إجابة صحيحة مسجلة" : "❌ إجابة خاطئة مسجلة";
+        statusIndicator.style.color = isCorrect ? "var(--success)" : "var(--danger)";
+
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        document.getElementById('progressBar').style.width = ((answeredCount / questions.length) * 100) + '%';
+    }
+
+    function showExplanation(isCorrect, chosenIdx) {
+        const q = questions[currentIdx];
+        const expBox = document.getElementById('explanationText');
+
+        if (isCorrect) {
+            expBox.innerHTML = `
+                <b>✅ إجابة صحيحة / Correct!</b><br>
+                <div>${q.exp_ar}</div>
+                <div class="exp-en">${q.exp_en}</div>
+            `;
+            expBox.style.borderRightColor = 'var(--success)';
+        } else {
+            expBox.innerHTML = `
+                <b>❌ إجابة غير صحيحة / Incorrect!</b><br>
+                <div>الإجابة الصحيحة هي: <b>${q.options[q.correct].ar}</b></div>
+                <div class="exp-en">Correct choice: <b>${q.options[q.correct].en}</b></div>
+                <div style="margin-top: 6px;">${q.exp_ar}</div>
+                <div class="exp-en">${q.exp_en}</div>
+            `;
+            expBox.style.borderRightColor = 'var(--danger)';
+        }
+        expBox.style.display = 'block';
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            displayQuestion();
+        } else {
+            showFinalResults();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            displayQuestion();
+        }
+    }
+
+    function openIndexModal() {
+        buildIndexGrid();
+        document.getElementById('indexModal').style.display = 'flex';
+    }
+
+    function closeIndexModal() {
+        document.getElementById('indexModal').style.display = 'none';
+    }
+
+    function closeIndexModalOnOutside(e) {
+        if (e.target.id === 'indexModal') {
+            closeIndexModal();
+        }
+    }
+
+    function buildIndexGrid() {
+        const grid = document.getElementById('gridIndexContainer');
+        grid.innerHTML = '';
+
+        for (let i = 0; i < questions.length; i++) {
+            const pill = document.createElement('div');
+            pill.className = 'index-pill';
+            pill.innerText = (i + 1);
+
+            if (i === currentIdx) {
+                pill.classList.add('active');
+            }
+
+            if (userAnswers[i] !== null) {
+                if (userAnswers[i] === questions[i].correct) {
+                    pill.classList.add('solved-correct');
+                } else {
+                    pill.classList.add('solved-wrong');
+                }
+            }
+
+            pill.onclick = () => {
+                currentIdx = i;
+                displayQuestion();
+                closeIndexModal();
+            };
+
+            grid.appendChild(pill);
+        }
+    }
+
+    function showFinalResults() {
+        document.getElementById('quizCard').style.display = 'none';
+        document.getElementById('progressBar').style.width = '100%';
+
+        const resultsCard = document.getElementById('resultsCard');
+        resultsCard.style.display = 'block';
+
+        calculateScore();
+        document.getElementById('finalScore').innerText = score;
+        const res = saveScores(score);
+        const scores = loadScores();
+
+        const notice = document.getElementById('highScoreNotice');
+        const msg = document.getElementById('resultMsg');
+        const icon = document.getElementById('trophyIcon');
+
+        let textDetails = `🎯 أول محاولة مسجلة (First Attempt): ${scores.first} من 20<br>`;
+        if (res.isNewHigh && score > 0) {
+            textDetails += `🏆 مبروك! حققت رقماً قياسياً جديداً: ${score} من 20!`;
+        } else {
+            textDetails += `🏆 أعلى نتيجة على هذا الجهاز: ${scores.high} من 20`;
+        }
+        notice.innerHTML = textDetails;
+
+        if (score >= 18) {
+            msg.innerText = "أداء استثنائي! إتقان تام لمفاهيم ودوال القوائم في بايثون";
+            icon.innerText = "👑";
+        } else if (score >= 14) {
+            msg.innerText = "مستوى جيد جداً! إدراك قوي لطرق التعامل مع القوائم";
+            icon.innerText = "🎉";
+        } else if (score >= 10) {
+            msg.innerText = "مستوى متوسط، يُفضل مراجعة دوال الحذف والتقطيع (Slicing)";
+            icon.innerText = "👍";
+        } else {
+            msg.innerText = "يُنصح بإعادة تجربة الأكواد وتطبيقها عملياً لترسيخ الفهم";
+            icon.innerText = "💡";
+        }
+    }
+
+    function restartQuiz() {
+        userAnswers = new Array(questions.length).fill(null);
+        currentIdx = 0;
+        score = 0;
+        document.getElementById('score').innerText = '0';
+        document.getElementById('resultsCard').style.display = 'none';
+        document.getElementById('quizCard').style.display = 'block';
+        displayQuestion();
+    }
+
+    window.onload = function() {
+        loadScores();
+        displayQuestion();
+    };
+</script>
+</body>
+</html>
